@@ -8,7 +8,7 @@ function FloatingInput({ label, type = 'text', value, onChange, name }) {
         name={name}
         value={value}
         onChange={onChange}
-        className="peer h-12 w-full text-[10px] border border-gray-300 rounded-md px-3 pt-5 pb-2 text-gray-900 placeholder-transparent focus:outline-none focus:ring-1 focus:ring-[#8CA566] focus:border-[#8CA566] text-[10px]"
+        className="peer h-12 w-full text-[14px] border border-gray-300 rounded-md px-3 pt-5 pb-2 text-gray-900 placeholder-transparent focus:outline-none focus:ring-1 focus:ring-[#8CA566] focus:border-[#8CA566] text-[10px]"
         placeholder={label}
         required
       />

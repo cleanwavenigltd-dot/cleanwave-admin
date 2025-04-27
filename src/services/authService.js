@@ -18,3 +18,30 @@ export const getProfile = async (token) => {
   });
   return response.data;
 };
+
+export const getTotals = async (token) => {
+  const response = await axios.get(`${BASE_URL}/auth/totals`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+
+export const getTransactions = async (token) => {
+  const response = await axios.get(`${BASE_URL}/transactions/admin/transactions`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+
+export const getPickups = async (token) => {
+  const response = await axios.get(`${BASE_URL}/pickups/all`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};

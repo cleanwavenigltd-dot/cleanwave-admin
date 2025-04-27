@@ -14,3 +14,14 @@ body {
 
 /* Add custom font import for Poppins and Lexend */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Lexend:wght@400;600&display=swap');
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
