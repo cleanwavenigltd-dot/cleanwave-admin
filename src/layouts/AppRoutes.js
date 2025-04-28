@@ -15,6 +15,7 @@ import PickupRequests from '../pages/PickupRequests/PickupRequests';
 import WalletTransactions from '../pages/WalletTransactions/WalletTransactions';
 import Marketplace from '../pages/Marketplace/Marketplace';
 import ProfileSettings from '../pages/ProfileSettings/ProfileSettings';
+import OrderManagement from '../pages/OrderManagement/OrderManagement';
 import NotFound from '../pages/NotFound/NotFound';
 
 const ProtectedRoute = ({ children }) => {
@@ -44,6 +45,7 @@ const AppRoutes = () => {
         <Route path="/pickup-requests" element={<PickupRequests />} />
         <Route path="/wallet-transactions" element={<WalletTransactions />} />
         <Route path="/marketplace" element={<Marketplace />} />
+        <Route path="/orders" element={<OrderManagement />} />
         <Route path="/profile" element={<ProfileSettings />} />
       </Route>
 

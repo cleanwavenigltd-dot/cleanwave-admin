@@ -55,11 +55,11 @@ const Table = ({ columns, data, actions, loading, icons, rowsPerPage = 5 }) => {
         <thead className="bg-gray-100 text-gray-600">
           <tr>
             {columns.map((col, index) => (
-              <th key={index} className="py-3 px-4">
+              <th key={index} className="py-3 text-[12px] px-4">
                 {col.label}
               </th>
             ))}
-            {actions && <th className="py-3 px-4">Actions</th>}
+            {actions && <th className="py-3 text-[12px] px-4">Actions</th>}
           </tr>
         </thead>
         <tbody>
@@ -70,22 +70,22 @@ const Table = ({ columns, data, actions, loading, icons, rowsPerPage = 5 }) => {
               .map((_, rowIndex) => (
                 <tr key={rowIndex} className="border-t animate-pulse">
                   {columns.map((_, colIndex) => (
-                    <td key={colIndex} className="py-3 px-4">
+                    <td key={colIndex} className="py-3 text-[12px] px-4">
                       <div className="h-4 bg-gray-300 rounded w-3/4"></div>
                     </td>
                   ))}
                   {actions && (
-                    <td className="py-3 px-4">
-                      <div className="h-4 bg-gray-300 rounded w-16"></div>
+                    <td className="py-3 text-[12px] px-4">
+                      <div className="h-4 bg-gray-300 text-[12px] rounded w-16"></div>
                     </td>
                   )}
                 </tr>
               ))
           ) : paginatedData.length > 0 ? (
             paginatedData.map((row, rowIndex) => (
-              <tr key={rowIndex} className="border-t hover:bg-gray-50">
+              <tr key={rowIndex} className="border-t text-[12px] hover:bg-gray-50">
                 {columns.map((col, colIndex) => (
-                  <td key={colIndex} className="py-3 px-4">
+                  <td key={colIndex} className="py-3 text-[12px] px-4">
                     {icons && icons[col.key] ? (
                       <div className="flex items-center gap-2">
                         {icons[col.key]}
@@ -113,7 +113,7 @@ const Table = ({ columns, data, actions, loading, icons, rowsPerPage = 5 }) => {
             ))
           ) : (
             <tr>
-              <td colSpan={columns.length + (actions ? 1 : 0)} className="py-6 text-center text-gray-500">
+              <td colSpan={columns.length + (actions ? 1 : 0)} className="py-6 text-center text-[25px] text-gray-500">
                 No data available
               </td>
             </tr>

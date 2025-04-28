@@ -11,14 +11,17 @@ import {
   LogOut,
   Menu,
   X,
+  Package, // Import the icon for Orders
 } from 'lucide-react';
 import { logout } from '../../redux/auth/authSlice';
 
+// Updated navItems array with "Orders" menu item
 const navItems = [
   { label: 'Dashboard', to: '/dashboard', icon: <LayoutDashboard size={20} /> },
+  { label: 'Pickup Requests', to: '/pickup-requests', icon: <Truck size={20} /> },
+  { label: 'Orders', to: '/orders', icon: <Package size={20} /> }, // Added Orders menu item
   { label: 'Agents', to: '/agents', icon: <Users size={20} /> },
   { label: 'Vendors', to: '/vendors', icon: <Store size={20} /> },
-  { label: 'Pickup Requests', to: '/pickups', icon: <Truck size={20} /> },
   { label: 'Wallet & Transactions', to: '/wallet', icon: <Wallet size={20} /> },
   { label: 'Marketplace', to: '/marketplace', icon: <ShoppingBag size={20} /> },
 ];

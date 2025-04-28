@@ -1,0 +1,13 @@
+import React from 'react';
+import VendorsTable from './components/VendorsTable';
+
+const VendorManagement = () => {
+  return (
+    <div className="p-6 space-y-6">
+      <h1 className="text-2xl font-bold text-gray-800 mb-6">Vendor Management</h1>
+      <VendorsTable />
+    </div>
+  );
+};
+
+export default VendorManagement;
