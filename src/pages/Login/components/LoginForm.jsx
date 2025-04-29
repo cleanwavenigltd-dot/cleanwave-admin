@@ -36,7 +36,7 @@ const LoginForm = () => {
     try {
       await dispatch(loginUser(formData)).unwrap();
       toast.success('Login successful!');
-      navigate('/dashboard'); // Navigate to the dashboard after login
+      navigate('/dashboard');
     } catch (error) {
       toast.error('Login failed. Please check your credentials.');
     } finally {
@@ -45,7 +45,7 @@ const LoginForm = () => {
   };
 
   return (
-    <form className="space-y-6 bg-white p-6 rounded-lg shadow-md" onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-y-5">
       <FloatingInput
         label="Email"
         name="email"
