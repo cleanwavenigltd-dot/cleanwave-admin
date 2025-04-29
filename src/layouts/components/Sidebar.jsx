@@ -22,7 +22,7 @@ const navItems = [
   { label: 'Orders', to: '/orders', icon: <Package size={20} /> }, // Added Orders menu item
   { label: 'Agents', to: '/agents', icon: <Users size={20} /> },
   { label: 'Vendors', to: '/vendors', icon: <Store size={20} /> },
-  { label: 'Wallet & Transactions', to: '/wallet', icon: <Wallet size={20} /> },
+  { label: 'Wallet & Transactions', to: '/wallet-transactions', icon: <Wallet size={20} /> },
   { label: 'Marketplace', to: '/marketplace', icon: <ShoppingBag size={20} /> },
 ];
 

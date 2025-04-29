@@ -39,7 +39,7 @@ const OrdersTable = () => {
     { label: 'ID', key: 'id', render: (id) => <span className="font-mono">#{id}</span> },
     { label: 'User Name', key: 'user_name', render: (name) => <span className="font-medium text-[12px]">{name || 'N/A'}</span> },
     { label: 'Email', key: 'email', render: (email) => <span className="text-gray-600 text-[12px]">{email}</span> },
-    { label: 'Price', key: 'price', render: (price) => <span className="font-medium text-[12px] text-green-600">${price?.toFixed(2) || '0.00'}</span> },
+    { label: 'Amount', key: 'price', render: (price) => <span className="font-medium text-[12px] text-green-600">₦{price?.toFixed(2) || '0.00'}</span> },
     { label: 'Date', key: 'created_at', render: (date) => (
         <div className="flex items-center gap-1">
           <CalendarDays size={14} className="text-gray-400" />
@@ -110,7 +110,7 @@ const OrdersTable = () => {
                 </h3>
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span className="text-gray-600 text-[12px]">Total Price:</span>
+                    <span className="text-gray-600 text-[12px]">Total Amout:</span>
                     <span className="text-green-600 font-medium text-[12px]">₦{selectedOrder.price?.toFixed(2) || '0.00'}</span>
                   </div>
                   <div className="flex justify-between">
