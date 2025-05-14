@@ -48,11 +48,34 @@ export const fetchProfile = createAsyncThunk(
   }
 );
 
+// Async thunk for fetching the vendor's profile
+export const fetchVendorProfile = createAsyncThunk(
+  'auth/fetchVendorProfile',
+  async (token, { rejectWithValue }) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/vendors/profile`, {
+        method: 'GET',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch vendor profile');
+      }
+
+      const data = await response.json();
+      return data; // Assuming the response contains vendor profile data
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
     token: tokenFromStorage || null,
     user: null,
+    vendor: null, // Added vendor state
     loading: false,
     error: null,
   },
@@ -61,6 +84,7 @@ const authSlice = createSlice({
       removeToken(); // Remove token from localStorage
       state.token = null; // Clear token from Redux state
       state.user = null; // Clear user data from Redux state
+      state.vendor = null; // Clear vendor data from Redux state
     },
   },
   extraReducers: (builder) => {
@@ -89,6 +113,19 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(fetchVendorProfile.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchVendorProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        state.vendor = action.payload; // Update Redux state with vendor profile
+        state.error = null;
+      })
+      .addCase(fetchVendorProfile.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

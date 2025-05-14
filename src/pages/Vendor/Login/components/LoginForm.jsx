@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import FloatingInput from '../../../components/ui/FloatingInput';
-import Button from '../../../components/ui/Button';
+import FloatingInput from '../../../../components/ui/FloatingInput';
+import Button from '../../../../components/ui/Button';
 import { useDispatch } from 'react-redux';
-import { loginUser } from '../../../redux/auth/authSlice';
+import { loginUser } from '../../../../redux/auth/authSlice';
 import { toast } from 'react-toastify';
 
 const LoginForm = ({ loginType = 'admin' }) => {

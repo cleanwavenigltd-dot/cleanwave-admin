@@ -45,3 +45,13 @@ export const getPickups = async (token) => {
   });
   return response.data;
 };
+
+// Fetch vendor profile
+export const getVendorProfile = async (token) => {
+  const response = await axios.get(`${BASE_URL}/vendors/profile`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
