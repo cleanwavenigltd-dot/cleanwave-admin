@@ -55,3 +55,13 @@ export const getVendorProfile = async (token) => {
   });
   return response.data;
 };
+
+// Fetch vendor dashboard data
+export const getVendorDashboardData = async (token) => {
+  const response = await axios.get(`${BASE_URL}/vendors/dashboard`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};

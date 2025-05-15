@@ -9,3 +9,11 @@ export const getOrders = async (token) => {
   });
   return response.data.orders;
 };
+
+// Fetch vendor orders
+export const getVendorOrders = async (token) => {
+  const response = await axios.get(`${BASE_URL}/orders/vendor/orders`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response.data.orders;
+};
