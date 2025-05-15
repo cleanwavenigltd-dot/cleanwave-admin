@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   LayoutDashboard,
@@ -11,15 +11,14 @@ import {
   LogOut,
   Menu,
   X,
-  Package, // Import the icon for Orders
+  Package,
 } from 'lucide-react';
 import { logout } from '../../redux/auth/authSlice';
 
-// Updated navItems array with "Orders" menu item
 const navItems = [
   { label: 'Dashboard', to: '/dashboard', icon: <LayoutDashboard size={20} /> },
   { label: 'Pickup Requests', to: '/pickup-requests', icon: <Truck size={20} /> },
-  { label: 'Orders', to: '/orders', icon: <Package size={20} /> }, // Added Orders menu item
+  { label: 'Orders', to: '/orders', icon: <Package size={20} /> },
   { label: 'Agents', to: '/agents', icon: <Users size={20} /> },
   { label: 'Vendors', to: '/vendors', icon: <Store size={20} /> },
   { label: 'Wallet & Transactions', to: '/wallet-transactions', icon: <Wallet size={20} /> },
@@ -28,10 +27,16 @@ const navItems = [
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth.user);
+  const navigate = useNavigate();
+  const admin = useSelector((state) => state.auth.admin); // Admin profile from Redux state
   const loading = useSelector((state) => state.auth.loading);
 
   if (loading) return <div className="p-4 text-white">Loading...</div>;
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/login'); // Redirect to the admin login page after logout
+  };
 
   return (
     <aside
@@ -52,12 +57,12 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         {/* Admin Card */}
         <div className="flex w-full items-center gap-4 bg-[#779254] rounded-2xl p-4 shadow-inner">
           <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center text-[#8CA566] font-bold text-sm shadow">
-            {user?.name?.charAt(0).toUpperCase() || 'A'}
+            {admin?.name?.charAt(0).toUpperCase() || 'A'}
           </div>
           {isOpen && (
             <div>
-              <p className="font-semibold text-[12px] text-base leading-tight">{user?.name || 'Admin'}</p>
-              <p className="text-[12px] opacity-80">{user?.role || 'admin@cleanwave.com'}</p>
+              <p className="font-semibold text-[12px] text-base leading-tight">{admin?.name || 'Admin'}</p>
+              <p className="text-[12px] opacity-80">{admin?.email || 'admin@cleanwave.com'}</p>
             </div>
           )}
         </div>
@@ -86,7 +91,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       {/* Bottom Section */}
       <div className="p-4 border-t border-white/20">
         <button
-          onClick={() => dispatch(logout())}
+          onClick={handleLogout}
           className={`flex items-center gap-3 w-full px-4 py-2 rounded-lg transition duration-200 hover:bg-white hover:text-[#8CA566] ${
             !isOpen ? 'justify-center px-2' : ''
           }`}

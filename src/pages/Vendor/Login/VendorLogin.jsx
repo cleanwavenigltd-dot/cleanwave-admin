@@ -1,14 +1,14 @@
 import React from 'react';
-import LoginForm from '../../Login/components/LoginForm';
+import LoginForm from './components/LoginForm';
 
-const VendorLogin = () => {
+const Login = () => {
   return (
     <div className="flex flex-col justify-center space-y-4">
       <div>
           </div>
-      <LoginForm loginType="vendor" />
+      <LoginForm />
     </div>
   );
 };
 
-export default VendorLogin;
+export default Login;

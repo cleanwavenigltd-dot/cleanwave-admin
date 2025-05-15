@@ -2,17 +2,19 @@ import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../../redux/auth/authSlice';
+import { useNavigate } from 'react-router-dom';
 
 const ProfileMenu = () => {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  // Fetch user data from Redux
-  const user = useSelector((state) => state.auth.user);
+  // Fetch admin profile from Redux
+  const admin = useSelector((state) => state.auth.admin);
 
   const handleLogout = () => {
     dispatch(logout());
-    window.location.reload(); // Reload the page to reset the app state
+    navigate('/login'); // Redirect to the admin login page after logout
   };
 
   return (
@@ -22,11 +24,11 @@ const ProfileMenu = () => {
         className="flex items-center gap-3 hover:bg-gray-100 transition px-3 py-2 rounded-xl"
       >
         <div className="w-10 h-10 rounded-full bg-[#8CA566] flex items-center justify-center text-white font-semibold">
-          {user?.name?.charAt(0).toUpperCase() || 'A'}
+          {admin?.name?.charAt(0).toUpperCase() || 'A'}
         </div>
         <div className="hidden md:block">
-          <p className="text-sm font-medium">{user?.name || 'Admin'}</p>
-          <p className="text-xs text-gray-500">{user?.email || 'admin@cleanwave.com'}</p>
+          <p className="text-sm font-medium">{admin?.name || 'Admin'}</p>
+          <p className="text-xs text-gray-500">{admin?.email || 'admin@cleanwave.com'}</p>
         </div>
         <ChevronDown className="text-gray-500" size={16} />
       </button>

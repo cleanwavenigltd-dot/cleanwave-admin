@@ -1,6 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
 import { getVendorOrders } from '../../../../services/orderService';
+
+// Register Chart.js components
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const SalesChart = () => {
   const [salesData, setSalesData] = useState({
@@ -49,7 +62,15 @@ const SalesChart = () => {
   return (
     <div className="bg-white shadow-md rounded-lg p-6">
       <h2 className="text-lg font-bold text-gray-800 mb-4">Sales Overview</h2>
-      <Line data={salesData} options={{ responsive: true, plugins: { legend: { position: 'top' } } }} />
+      <Line
+        data={salesData}
+        options={{
+          responsive: true,
+          plugins: {
+            legend: { position: 'top' },
+          },
+        }}
+      />
     </div>
   );
 };

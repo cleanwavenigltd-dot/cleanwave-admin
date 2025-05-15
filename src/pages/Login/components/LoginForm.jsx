@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import FloatingInput from '../../../components/ui/FloatingInput';
 import Button from '../../../components/ui/Button';
 import { useDispatch } from 'react-redux';
-import { loginUser } from '../../../redux/auth/authSlice';
+import { loginAdmin } from '../../../redux/auth/authSlice';
 import { toast } from 'react-toastify';
 
-const LoginForm = ({ loginType = 'admin' }) => {
+const LoginForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -34,32 +34,29 @@ const LoginForm = ({ loginType = 'admin' }) => {
 
     setIsLoading(true);
     try {
-      const loginEndpoint =
-        loginType === 'vendor'
-          ? `${process.env.REACT_APP_API_BASE_URL}/vendors/login`
-          : `${process.env.REACT_APP_API_BASE_URL}/auth/login`;
-
       await dispatch(
-        loginUser({ email: formData.email, password: formData.password, loginEndpoint })
+        loginAdmin({ email: formData.email, password: formData.password })
       ).unwrap();
 
-      toast.success('Login successful!');
-      navigate(loginType === 'vendor' ? '/vendor/dashboard' : '/dashboard');
+      toast.success('Admin login successful!');
+      navigate('/dashboard');
     } catch (error) {
-      toast.error('Login failed. Please check your credentials.');
+      toast.error(error || 'Login failed. Please check your credentials.');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-y-5">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-y-6 bg-white p-6 rounded-lg shadow-md">
+      <h2 className="text-xl font-bold text-gray-800 text-center">Admin Login</h2>
       <FloatingInput
         label="Email"
         name="email"
         type="email"
         value={formData.email}
         onChange={handleChange}
+        placeholder="Enter your email"
       />
       <FloatingInput
         label="Password"
@@ -67,12 +64,13 @@ const LoginForm = ({ loginType = 'admin' }) => {
         type="password"
         value={formData.password}
         onChange={handleChange}
+        placeholder="Enter your password"
       />
       <Button
         type="submit"
         isActive={formData.email && formData.password}
         isLoading={isLoading}
-        className="w-full"
+        className="w-full bg-[#8CA566] text-white hover:bg-[#779254] transition"
       >
         Login
       </Button>

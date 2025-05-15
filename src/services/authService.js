@@ -46,7 +46,27 @@ export const getPickups = async (token) => {
   return response.data;
 };
 
-// Fetch vendor profile
+
+
+// Fetch vendor dashboard data
+export const getVendorDashboardData = async (token) => {
+  const response = await axios.get(`${BASE_URL}/vendors/dashboard`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+
+
+export const vendorLogin = async (email, password) => {
+  const response = await axios.post(`${BASE_URL}/vendors/login`, {
+    email,
+    password,
+  });
+  return response.data;
+};
+
 export const getVendorProfile = async (token) => {
   const response = await axios.get(`${BASE_URL}/vendors/profile`, {
     headers: {
@@ -56,9 +76,17 @@ export const getVendorProfile = async (token) => {
   return response.data;
 };
 
-// Fetch vendor dashboard data
-export const getVendorDashboardData = async (token) => {
-  const response = await axios.get(`${BASE_URL}/vendors/dashboard`, {
+// Admin-specific API calls (unchanged)
+export const adminLogin = async (email, password) => {
+  const response = await axios.post(`${BASE_URL}/auth/login`, {
+    email,
+    password,
+  });
+  return response.data;
+};
+
+export const getAdminProfile = async (token) => {
+  const response = await axios.get(`${BASE_URL}/auth/profile`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

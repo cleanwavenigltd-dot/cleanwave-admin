@@ -6,7 +6,7 @@ const Login = () => {
     <div className="flex flex-col justify-center space-y-4">
       <div>
           </div>
-      <LoginForm loginType="admin" />
+      <LoginForm/>
     </div>
   );
 };

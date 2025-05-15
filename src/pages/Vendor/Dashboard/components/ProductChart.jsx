@@ -1,6 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
 import { getVendorOrders } from '../../../../services/orderService';
+
+// Register Chart.js components
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const ProductChart = () => {
   const [productData, setProductData] = useState({
@@ -58,7 +70,15 @@ const ProductChart = () => {
   return (
     <div className="bg-white shadow-md rounded-lg p-6">
       <h2 className="text-lg font-bold text-gray-800 mb-4">Product Performance</h2>
-      <Bar data={productData} options={{ responsive: true, plugins: { legend: { position: 'top' } } }} />
+      <Bar
+        data={productData}
+        options={{
+          responsive: true,
+          plugins: {
+            legend: { position: 'top' },
+          },
+        }}
+      />
     </div>
   );
 };
