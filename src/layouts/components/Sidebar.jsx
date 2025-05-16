@@ -34,8 +34,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
   if (loading) return <div className="p-4 text-white">Loading...</div>;
 
   const handleLogout = () => {
-    dispatch(logout());
-    navigate('/login'); // Redirect to the admin login page after logout
+    dispatch(logout({ role: 'admin' })); // Pass role as 'admin'
   };
 
   return (

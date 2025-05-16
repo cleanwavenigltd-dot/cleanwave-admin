@@ -32,7 +32,7 @@ export const fetchVendorProfile = createAsyncThunk(
   }
 );
 
-// Async thunk for admin login (unchanged)
+// Async thunk for admin login
 export const loginAdmin = createAsyncThunk(
   'auth/loginAdmin',
   async ({ email, password }, { rejectWithValue }) => {
@@ -46,7 +46,7 @@ export const loginAdmin = createAsyncThunk(
   }
 );
 
-// Async thunk for fetching admin profile (unchanged)
+// Async thunk for fetching admin profile
 export const fetchAdminProfile = createAsyncThunk(
   'auth/fetchAdminProfile',
   async (_, { getState, rejectWithValue }) => {
@@ -70,11 +70,19 @@ const authSlice = createSlice({
     error: null,
   },
   reducers: {
-    logout: (state) => {
+    logout: (state, action) => {
       removeToken(); // Remove token from localStorage
       state.token = null; // Clear token from Redux state
       state.vendor = null; // Clear vendor data
       state.admin = null; // Clear admin data
+
+      // Redirect based on role
+      const { role } = action.payload || {};
+      if (role === 'admin') {
+        window.location.href = '/login'; // Redirect to admin login
+      } else {
+        window.location.href = '/vendor/login'; // Redirect to vendor login
+      }
     },
   },
   extraReducers: (builder) => {
@@ -109,7 +117,7 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
 
-      // Admin Login (unchanged)
+      // Admin Login
       .addCase(loginAdmin.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -124,7 +132,7 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
 
-      // Fetch Admin Profile (unchanged)
+      // Fetch Admin Profile
       .addCase(fetchAdminProfile.pending, (state) => {
         state.loading = true;
         state.error = null;

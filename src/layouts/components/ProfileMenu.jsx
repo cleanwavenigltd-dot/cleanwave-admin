@@ -13,8 +13,7 @@ const ProfileMenu = () => {
   const admin = useSelector((state) => state.auth.admin);
 
   const handleLogout = () => {
-    dispatch(logout());
-    navigate('/login'); // Redirect to the admin login page after logout
+    dispatch(logout({ role: 'admin' })); // Pass role as 'admin'
   };
 
   return (

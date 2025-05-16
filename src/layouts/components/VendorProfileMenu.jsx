@@ -7,6 +7,10 @@ const VendorProfileMenu = () => {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
 
+  const handleLogout = () => {
+    dispatch(logout({ role: 'vendor' })); // Pass the role as 'vendor'
+  };
+
   return (
     <div className="relative">
       {/* Store Icon Button */}
@@ -34,7 +38,7 @@ const VendorProfileMenu = () => {
             </li>
             <li
               className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center gap-2"
-              onClick={() => dispatch(logout())}
+              onClick={handleLogout} // Call the handleLogout function
             >
               <LogOut size={16} />
               Logout

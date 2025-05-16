@@ -24,6 +24,10 @@ const VendorSidebar = ({ isOpen, setIsOpen }) => {
   const dispatch = useDispatch();
   const vendor = useSelector((state) => state.auth.vendor);
 
+  const handleLogout = () => {
+    dispatch(logout({ role: 'vendor' })); // Pass the role as 'vendor'
+  };
+
   return (
     <aside
       className={`h-full bg-[#8CA566] text-white flex flex-col justify-between shadow-lg transition-all duration-300 ${
@@ -77,7 +81,7 @@ const VendorSidebar = ({ isOpen, setIsOpen }) => {
       {/* Logout */}
       <div className="p-4 border-t border-white/20">
         <button
-          onClick={() => dispatch(logout())}
+          onClick={handleLogout} // Call the handleLogout function
           className={`flex items-center gap-3 w-full px-4 py-2 rounded-lg transition duration-200 hover:bg-white hover:text-[#8CA566] ${
             !isOpen ? 'justify-center px-2' : ''
           }`}

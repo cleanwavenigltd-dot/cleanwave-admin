@@ -49,7 +49,7 @@ const LoginForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-y-6 bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-xl font-bold text-gray-800 text-center">Admin Login</h2>
+      {/* <h2 className="text-xl font-bold text-gray-800 text-center">Admin Login</h2> */}
       <FloatingInput
         label="Email"
         name="email"
