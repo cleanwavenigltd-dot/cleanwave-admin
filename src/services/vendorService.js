@@ -17,3 +17,12 @@ export const registerVendor = async (vendorData, token) => {
   });
   return response.data;
 };
+
+export const getVendorWallet = async (token) => {
+  const response = await axios.get(`${BASE_URL}/vendors/wallet`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};

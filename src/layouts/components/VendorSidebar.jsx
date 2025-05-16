@@ -17,7 +17,6 @@ const navItems = [
   { label: 'Dashboard', to: '/vendor/dashboard', icon: <LayoutDashboard size={20} /> },
   { label: 'Products', to: '/vendor/products', icon: <ShoppingBag size={20} /> },
   { label: 'Orders', to: '/vendor/orders', icon: <Package size={20} /> },
-  { label: 'Wallet', to: '/vendor/wallet', icon: <Wallet size={20} /> },
   { label: 'Profile', to: '/vendor/profile', icon: <User size={20} /> },
 ];
 
