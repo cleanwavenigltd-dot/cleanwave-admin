@@ -16,10 +16,20 @@ export const getVendorProducts = async (token) => {
   return response.data;
 };
 
-// Add a new product
-export const addProduct = async (token, productData) => {
-  const response = await axios.post(`${BASE_URL}/products`, productData, {
-    headers: { Authorization: `Bearer ${token}` },
+export const addProduct = async (formData, token) => {
+  const response = await axios.post(`${BASE_URL}/products`, formData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+
+export const deleteProduct = async (productId, token) => {
+  const response = await axios.delete(`${BASE_URL}/products/${productId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   });
   return response.data;
 };
