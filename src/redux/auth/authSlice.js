@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getToken, saveToken, removeToken } from '../../utils/auth';
-import { vendorLogin, getVendorProfile, adminLogin, getAdminProfile } from '../../services/authService';
+import { vendorLogin, getVendorProfile, adminLogin, getAdminProfile, userLogin, getUserProfile } from '../../services/authService';
 
 const tokenFromStorage = getToken();
 
@@ -10,7 +10,7 @@ export const loginVendor = createAsyncThunk(
   async ({ email, password }, { rejectWithValue }) => {
     try {
       const data = await vendorLogin(email, password);
-      saveToken(data.token); // Save vendor token to localStorage
+      saveToken(data.token);
       return data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to log in as vendor');
@@ -38,7 +38,7 @@ export const loginAdmin = createAsyncThunk(
   async ({ email, password }, { rejectWithValue }) => {
     try {
       const data = await adminLogin(email, password);
-      saveToken(data.token); // Save admin token to localStorage
+      saveToken(data.token);
       return data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to log in as admin');
@@ -60,28 +60,59 @@ export const fetchAdminProfile = createAsyncThunk(
   }
 );
 
+// Async thunk for user login
+export const loginUser = createAsyncThunk(
+  'auth/loginUser',
+  async ({ email, password }, { rejectWithValue }) => {
+    try {
+      const data = await userLogin(email, password);
+      saveToken(data.token);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to log in as user');
+    }
+  }
+);
+
+// Async thunk for fetching user profile
+export const fetchUserProfile = createAsyncThunk(
+  'auth/fetchUserProfile',
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const token = getState().auth.token;
+      const data = await getUserProfile(token);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch user profile');
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
     token: tokenFromStorage || null,
-    vendor: null, // Vendor profile
-    admin: null, // Admin profile
+    vendor: null,
+    admin: null,
+    user: null, // Add user profile
     loading: false,
     error: null,
   },
   reducers: {
     logout: (state, action) => {
-      removeToken(); // Remove token from localStorage
-      state.token = null; // Clear token from Redux state
-      state.vendor = null; // Clear vendor data
-      state.admin = null; // Clear admin data
-
+      removeToken();
+      state.token = null;
+      state.vendor = null;
+      state.admin = null;
+      state.user = null;
       // Redirect based on role
       const { role } = action.payload || {};
       if (role === 'admin') {
-        window.location.href = '/login'; // Redirect to admin login
+        window.location.href = '/login';
+      } else if (role === 'vendor') {
+        window.location.href = '/vendor/login';
       } else {
-        window.location.href = '/vendor/login'; // Redirect to vendor login
+        window.location.href = '/user/login';
       }
     },
   },
@@ -94,7 +125,7 @@ const authSlice = createSlice({
       })
       .addCase(loginVendor.fulfilled, (state, action) => {
         state.loading = false;
-        state.token = action.payload.token; // Save vendor token
+        state.token = action.payload.token;
         state.error = null;
       })
       .addCase(loginVendor.rejected, (state, action) => {
@@ -109,7 +140,7 @@ const authSlice = createSlice({
       })
       .addCase(fetchVendorProfile.fulfilled, (state, action) => {
         state.loading = false;
-        state.vendor = action.payload; // Save vendor profile
+        state.vendor = action.payload;
         state.error = null;
       })
       .addCase(fetchVendorProfile.rejected, (state, action) => {
@@ -124,7 +155,7 @@ const authSlice = createSlice({
       })
       .addCase(loginAdmin.fulfilled, (state, action) => {
         state.loading = false;
-        state.token = action.payload.token; // Save admin token
+        state.token = action.payload.token;
         state.error = null;
       })
       .addCase(loginAdmin.rejected, (state, action) => {
@@ -139,10 +170,40 @@ const authSlice = createSlice({
       })
       .addCase(fetchAdminProfile.fulfilled, (state, action) => {
         state.loading = false;
-        state.admin = action.payload; // Save admin profile
+        state.admin = action.payload;
         state.error = null;
       })
       .addCase(fetchAdminProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // User Login
+      .addCase(loginUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.token = action.payload.token;
+        state.error = null;
+      })
+      .addCase(loginUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // Fetch User Profile
+      .addCase(fetchUserProfile.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchUserProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+        state.error = null;
+      })
+      .addCase(fetchUserProfile.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

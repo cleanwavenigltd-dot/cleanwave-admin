@@ -5,7 +5,7 @@ import Lottie from 'lottie-react';
 import Button from '../../../components/ui/Button';
 import FloatingInput from '../../../components/ui/FloatingInput';
 import recycleAnimation from '../../../assets/recycle.json'; // Make sure this file exists
-import { login } from '../../../services/authService';
+import { userLogin } from '../../../services/authService';
 
 const Login = () => {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -23,7 +23,7 @@ const Login = () => {
     setLoading(true);
     setError('');
     try {
-      const data = await login(form.email, form.password);
+      const data = await userLogin(form.email, form.password);
       // Save token to localStorage
       localStorage.setItem('token', data.token);
       // Redirect to user home/dashboard

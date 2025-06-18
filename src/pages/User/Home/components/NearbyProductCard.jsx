@@ -3,12 +3,14 @@ import { FiShoppingCart } from 'react-icons/fi';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../../../../redux/cart/cartSlice';
 import { getProducts } from '../../../../services/marketplaceService';
+import { useNavigate } from 'react-router-dom';
 
 const placeholderImage = "https://via.placeholder.com/150x120?text=No+Image";
 
 const NearbyProductCard = () => {
   const [products, setProducts] = useState([]);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -27,6 +29,10 @@ const NearbyProductCard = () => {
     // Optionally show a toast here
   };
 
+  const handleCardClick = (id) => {
+    navigate(`/products/${id}`);
+  };
+
   return (
     <div className="w-full">
       <div className="font-bold text-[#8CA566] mb-3">Recent Products</div>
@@ -37,7 +43,8 @@ const NearbyProductCard = () => {
           {products.slice(0, 6).map((item) => (
             <div
               key={item.id}
-              className="relative flex flex-col items-start bg-[#f8faf5] border border-[#e6f2d9] rounded-xl p-3 transition hover:shadow-md"
+              className="relative flex flex-col items-start bg-[#f8faf5] border border-[#e6f2d9] rounded-xl p-3 transition hover:shadow-md cursor-pointer"
+              onClick={() => handleCardClick(item.id)}
             >
               <img
                 src={
@@ -57,7 +64,10 @@ const NearbyProductCard = () => {
               </div>
               <button
                 className="absolute top-3 right-3 bg-[#8CA566] p-2 rounded-full shadow hover:bg-[#6d8f3c] transition"
-                onClick={() => handleAddToCart(item)}
+                onClick={e => {
+                  e.stopPropagation();
+                  handleAddToCart(item);
+                }}
                 title="Add to cart"
               >
                 <FiShoppingCart size={18} color="#fff" />

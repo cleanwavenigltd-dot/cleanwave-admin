@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { FiBell, FiShoppingCart } from 'react-icons/fi';
 import { getProfile } from '../../services/authService';
+import { useNavigate } from 'react-router-dom';
 
 const placeholderAvatar = 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
 
@@ -12,10 +13,11 @@ const getGreeting = () => {
   return 'Good evening';
 };
 
-const UserHeader = ({ onNotificationClick, onCartClick }) => {
+const UserHeader = ({ onNotificationClick }) => {
   const [user, setUser] = useState(null);
   const [notificationCount, setNotificationCount] = useState(0); // You can fetch real notifications if needed
   const cartItems = useSelector((state) => state.cart.cartItems);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -63,7 +65,7 @@ const UserHeader = ({ onNotificationClick, onCartClick }) => {
         {/* Cart */}
         <button
           className="relative bg-white rounded-full p-2 shadow hover:bg-[#f3f7ed] transition"
-          onClick={onCartClick}
+          onClick={() => navigate('/marketplace/cart')}
         >
           <FiShoppingCart size={22} className="text-[#8CA566]" />
           {cartItems.length > 0 && (

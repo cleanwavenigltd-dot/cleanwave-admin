@@ -34,6 +34,9 @@ import UserPickups from '../pages/User/Pickups/Pickups';
 import UserMarketplace from '../pages/User/Marketplace/Marketplace';
 import UserWallet from '../pages/User/Wallet/Wallet';
 import UserProfile from '../pages/User/Profile/Profile';
+import ProductDetails from '../pages/User/other/ProductDetails';
+import Checkout from '../pages/User/Marketplace/components/Checkout';
+import RequestPickup from '../pages/User/Pickups/components/RequestPickup';
 
 const ProtectedRoute = ({ children }) => {
   const auth = isAuthenticated();
@@ -50,6 +53,9 @@ const AppRoutes = () => (
       <Route path="/marketplace" element={<UserMarketplace />} />
       <Route path="/wallet" element={<UserWallet />} />
       <Route path="/profile" element={<UserProfile />} />
+      <Route path="/products/:id" element={<ProductDetails />} />
+      <Route path="/marketplace/cart" element={<Checkout />} />
+      <Route path="/request-pickup" element={<RequestPickup />} />
     </Route>
 
     {/* Admin/Vendor Auth */}

@@ -4,7 +4,7 @@ import { FiHome, FiShoppingCart, FiUser, FiCreditCard } from 'react-icons/fi';
 import { MdDirectionsBike } from 'react-icons/md';
 
 const navItems = [
-  { to: '/', label: 'Home', icon: <FiHome size={22} /> },
+  { to: '/home', label: 'Home', icon: <FiHome size={22} /> },
   { to: '/pickups', label: 'Pickup', icon: <MdDirectionsBike size={22} /> },
   { to: '/marketplace', label: '', icon: <FiShoppingCart size={28} color="#fff" /> },
   { to: '/wallet', label: 'Wallet', icon: <FiCreditCard size={22} /> },

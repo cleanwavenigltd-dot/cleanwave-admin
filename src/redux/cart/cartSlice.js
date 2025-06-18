@@ -1,7 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+// Load cart from localStorage if available
+const savedCart = localStorage.getItem('cartItems');
 const initialState = {
-  cartItems: [],
+  cartItems: savedCart ? JSON.parse(savedCart) : [],
 };
 
 const cartSlice = createSlice({
@@ -9,7 +11,6 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action) => {
-      // Prevent duplicates by product id
       const exists = state.cartItems.some(item => item.id === action.payload.id);
       if (!exists) {
         state.cartItems.push(action.payload);

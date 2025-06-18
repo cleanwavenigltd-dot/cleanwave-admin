@@ -17,3 +17,13 @@ export const getVendorOrders = async (token) => {
   });
   return response.data.orders;
 };
+
+// Place a new order
+export const placeOrder = async (products, token) => {
+  const response = await axios.post(
+    `${BASE_URL}/orders`,
+    { products },
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+  return response.data;
+};

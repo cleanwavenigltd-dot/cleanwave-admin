@@ -93,3 +93,23 @@ export const getAdminProfile = async (token) => {
   });
   return response.data;
 };
+
+// Vendor login
+
+
+// Admin login
+
+
+// User login (NEW)
+export const userLogin = async (email, password) => {
+  const res = await axios.post(`${BASE_URL}/auth/login`, { email, password });
+  return res.data;
+};
+
+// User profile (NEW)
+export const getUserProfile = async (token) => {
+  const res = await axios.get(`${BASE_URL}/auth/profile`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return res.data;
+};

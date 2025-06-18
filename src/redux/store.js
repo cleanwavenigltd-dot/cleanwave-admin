@@ -9,4 +9,10 @@ const store = configureStore({
   },
 });
 
+store.subscribe(() => {
+  const state = store.getState();
+  localStorage.setItem('cartItems', JSON.stringify(state.cart.cartItems));
+});
+
+
 export default store;
