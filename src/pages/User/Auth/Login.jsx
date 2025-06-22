@@ -4,8 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import Lottie from 'lottie-react';
 import Button from '../../../components/ui/Button';
 import FloatingInput from '../../../components/ui/FloatingInput';
-import recycleAnimation from '../../../assets/recycle.json'; // Make sure this file exists
-import { userLogin } from '../../../services/authService';
+import recycleAnimation from '../../../assets/recycle.json';
+import { useDispatch } from 'react-redux';
+import { loginUser, fetchUserProfile } from '../../../redux/auth/authSlice';
 
 const Login = () => {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -13,6 +14,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -23,14 +25,16 @@ const Login = () => {
     setLoading(true);
     setError('');
     try {
-      const data = await userLogin(form.email, form.password);
-      // Save token to localStorage
-      localStorage.setItem('token', data.token);
+      // Login via Redux thunk (saves token in Redux and localStorage)
+      await dispatch(loginUser({ email: form.email, password: form.password })).unwrap();
+      // Fetch user profile and store in Redux
+      await dispatch(fetchUserProfile()).unwrap();
       // Redirect to user home/dashboard
       navigate('/home');
     } catch (err) {
       setError(
         err?.response?.data?.message ||
+        err?.message ||
         'Login failed. Please check your credentials.'
       );
     } finally {

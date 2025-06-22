@@ -16,14 +16,14 @@ const UserLayout = () => {
           onCartClick={() => navigate('/marketplace')}
         />
       </div>
-      {/* Layout with PickupStatusTabs on desktop */}
-      <div className="flex flex-1 pt-[76px] pb-20">
+      {/* Responsive Layout */}
+      <div className="flex flex-1 pt-[76px] pb-20 w-full max-w-[1600px] mx-auto">
         {/* Main Content */}
-        <div className="flex-1 w-full px-2 sm:px-6">
+        <div className="flex-1 w-full px-2 sm:px-6 max-w-3xl mx-auto">
           <Outlet />
         </div>
         {/* Desktop-only Pickup Status Tabs */}
-        <div className="hidden lg:block flex-shrink-0 pl-6 pr-8 pt-2 w-[370px]">
+        <div className="hidden lg:block flex-shrink-0 pl-6 pr-8 pt-2 w-[380px]">
           <PickupStatusTabs />
         </div>
       </div>

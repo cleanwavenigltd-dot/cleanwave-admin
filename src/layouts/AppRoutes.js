@@ -37,6 +37,7 @@ import UserProfile from '../pages/User/Profile/Profile';
 import ProductDetails from '../pages/User/other/ProductDetails';
 import Checkout from '../pages/User/Marketplace/components/Checkout';
 import RequestPickup from '../pages/User/Pickups/components/RequestPickup';
+import PickupsHistory from '../pages/User/Pickups/components/PickupsHistory';
 
 const ProtectedRoute = ({ children }) => {
   const auth = isAuthenticated();
@@ -56,6 +57,7 @@ const AppRoutes = () => (
       <Route path="/products/:id" element={<ProductDetails />} />
       <Route path="/marketplace/cart" element={<Checkout />} />
       <Route path="/request-pickup" element={<RequestPickup />} />
+      <Route path="/pickups/history" element={<PickupsHistory />} />
     </Route>
 
     {/* Admin/Vendor Auth */}

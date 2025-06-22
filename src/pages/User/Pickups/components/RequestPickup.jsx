@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FiChevronLeft, FiMapPin, FiMail, FiPhone, FiPhoneCall } from 'react-icons/fi';
+import { FiChevronLeft, FiMapPin, FiMail, FiPhone, FiPhoneCall, FiCheckCircle } from 'react-icons/fi';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
@@ -15,12 +15,32 @@ const getCurrentTime = () => {
   return d.toTimeString().slice(0, 5);
 };
 
+const SuccessModal = ({ open, onClose }) => {
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
+      <div className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center max-w-xs w-full">
+        <FiCheckCircle size={56} className="text-green-500 mb-3" />
+        <h3 className="text-lg font-bold text-[#4C862D] mb-2">Request Submitted!</h3>
+        <p className="text-gray-600 text-center mb-4">
+          Your pickup request was submitted successfully.
+        </p>
+        <button
+          onClick={onClose}
+          className="bg-[#8CA566] hover:bg-[#6d8f3c] text-white px-6 py-2 rounded-lg font-semibold transition"
+        >
+          Go to History
+        </button>
+      </div>
+    </div>
+  );
+};
+
 const RequestPickup = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { agent } = location.state || {};
   const token = useSelector((state) => state.auth.token);
-  // Get user profile from Redux (populated by getProfile API)
   const user = useSelector((state) => state.auth.user);
 
   const [categories, setCategories] = useState([]);
@@ -29,6 +49,7 @@ const RequestPickup = () => {
   const [time, setTime] = useState(getCurrentTime());
   const [pickupLocation, setPickupLocation] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   // Fetch waste categories directly with axios
   useEffect(() => {
@@ -38,12 +59,9 @@ const RequestPickup = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
         setCategories(res.data?.wasteCategories || []);
-        // For debugging
-        console.log('Waste categories response:', res.data);
       } catch (err) {
         setCategories([]);
         toast.error('Failed to load waste categories.');
-        console.error('Waste categories error:', err);
       }
     };
     if (token) fetchCategories();
@@ -79,26 +97,26 @@ const RequestPickup = () => {
         time,
         location: pickupLocation,
       };
-      console.log('Submitting pickup:', payload);
-      const res = await axios.post(`${BASE_URL}/pickups`, payload, {
+      await axios.post(`${BASE_URL}/pickups`, payload, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      console.log('Pickup API response:', res.data);
-      toast.success('Pickup request submitted successfully!');
-      setTimeout(() => navigate('/pickups/success', {
-        state: { category: categories.find(c => c.id === selectedCategory)?.name, date, time, location: pickupLocation }
-      }), 1200);
+      setShowSuccess(true);
     } catch (error) {
-      console.error('Pickup API error:', error);
       toast.error(error?.response?.data?.message || 'Failed to submit pickup request.');
     } finally {
       setLoading(false);
     }
   };
 
+  const handleSuccessClose = () => {
+    setShowSuccess(false);
+    navigate('/pickups/history');
+  };
+
   return (
     <div className="w-full min-h-screen bg-[#f8faf5] flex justify-center items-start py-6 px-2 sm:px-0">
       <ToastContainer position="top-center" />
+      <SuccessModal open={showSuccess} onClose={handleSuccessClose} />
       <div className="w-full max-w-lg bg-white rounded-xl shadow-lg p-4 sm:p-8">
         {/* Back Button */}
         <button
