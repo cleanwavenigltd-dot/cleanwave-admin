@@ -108,7 +108,7 @@ const authSlice = createSlice({
       // Redirect based on role
       const { role } = action.payload || {};
       if (role === 'admin') {
-        window.location.href = '/login';
+        window.location.href = '/admin/login';
       } else if (role === 'vendor') {
         window.location.href = '/vendor/login';
       } else {
