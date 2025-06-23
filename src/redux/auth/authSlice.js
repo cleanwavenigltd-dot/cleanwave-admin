@@ -112,7 +112,7 @@ const authSlice = createSlice({
       } else if (role === 'vendor') {
         window.location.href = '/vendor/login';
       } else {
-        window.location.href = '/user/login';
+        window.location.href = '/';
       }
     },
   },

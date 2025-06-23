@@ -113,3 +113,32 @@ export const getUserProfile = async (token) => {
   });
   return res.data;
 };
+
+export const updateProfile = async (data, token) => {
+  const response = await axios.put(`${BASE_URL}/auth/update-profile`, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+
+export const register = async (data) => {
+  const response = await axios.post(`${BASE_URL}/auth/register`, data);
+  return response.data;
+};
+
+export const verifyEmail = async ({ email, code }) => {
+  const response = await axios.post(`${BASE_URL}/auth/verify-email`, { email, code });
+  return response.data;
+};
+
+export const forgotPassword = async (email) => {
+  const response = await axios.post(`${BASE_URL}/auth/forgot-password`, { email });
+  return response.data;
+};
+
+export const resetPassword = async ({ email, otp, newPassword }) => {
+  const response = await axios.post(`${BASE_URL}/auth/reset-password`, { email, otp, newPassword });
+  return response.data;
+};

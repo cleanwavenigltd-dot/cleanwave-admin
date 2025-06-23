@@ -1,6 +1,5 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { isAuthenticated } from '../utils/auth';
 
 // Layouts
 import AuthLayout from './AuthLayout';
@@ -38,17 +37,26 @@ import ProductDetails from '../pages/User/other/ProductDetails';
 import Checkout from '../pages/User/Marketplace/components/Checkout';
 import RequestPickup from '../pages/User/Pickups/components/RequestPickup';
 import PickupsHistory from '../pages/User/Pickups/components/PickupsHistory';
+import Register from '../pages/User/Auth/Register';
+import AuthScreen from '../pages/User/Auth/AuthScreen';
 
-const ProtectedRoute = ({ children }) => {
-  const auth = isAuthenticated();
-  return auth ? children : <Navigate to="/vendor/login" />;
-};
+// ProtectedRoute
+import ProtectedRoute from './ProtectedRoute';
+import NotFound from '../pages/User/other/NotFound';
 
 const AppRoutes = () => (
   <Routes>
-    {/* User Public & Protected Routes */}
-    <Route path="/" element={<UserLogin />} />
-    <Route element={<UserLayout />}>
+    {/* User Public Route */}
+    <Route path="/" element={<AuthScreen />} />
+
+    {/* User Protected Routes */}
+    <Route
+      element={
+        <ProtectedRoute>
+          <UserLayout />
+        </ProtectedRoute>
+      }
+    >
       <Route path="/home" element={<UserHome />} />
       <Route path="/pickups" element={<UserPickups />} />
       <Route path="/marketplace" element={<UserMarketplace />} />
@@ -66,7 +74,7 @@ const AppRoutes = () => (
       <Route path="/vendor/login" element={<VendorLogin />} />
     </Route>
 
-    {/* Vendor Routes */}
+    {/* Vendor Protected Routes */}
     <Route
       element={
         <ProtectedRoute>
@@ -81,7 +89,7 @@ const AppRoutes = () => (
       <Route path="/vendor/profile" element={<VendorProfile />} />
     </Route>
 
-    {/* Admin Routes */}
+    {/* Admin Protected Routes */}
     <Route
       element={
         <ProtectedRoute>
@@ -100,7 +108,7 @@ const AppRoutes = () => (
     </Route>
 
     {/* Redirect unknown routes */}
-    <Route path="*" element={<Navigate to="/" />} />
+        <Route path="*" element={<NotFound />} />
   </Routes>
 );
 

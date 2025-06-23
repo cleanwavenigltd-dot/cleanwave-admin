@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
-import { FiMail, FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
-import { useNavigate } from 'react-router-dom';
+import { FiMail, FiLock, FiUser, FiPhone, FiEye, FiEyeOff } from 'react-icons/fi';
+import Lottie from 'lottie-react';
 import Button from '../../../components/ui/Button';
 import FloatingInput from '../../../components/ui/FloatingInput';
-import { useDispatch } from 'react-redux';
-import { loginUser, fetchUserProfile } from '../../../redux/auth/authSlice';
+import recycleAnimation from '../../../assets/recycle.json';
+import { register } from '../../../services/authService';
+import VerifyEmail from './VerifyEmail';
 
-const Login = ({ onSwitch }) => {
-  const [form, setForm] = useState({ email: '', password: '' });
+const Register = ({ onSwitch }) => {
+  const [form, setForm] = useState({ name: '', email: '', phone: '', password: '' });
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const [success, setSuccess] = useState('');
+  const [showVerify, setShowVerify] = useState(false);
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -22,23 +23,41 @@ const Login = ({ onSwitch }) => {
     e.preventDefault();
     setLoading(true);
     setError('');
+    setSuccess('');
     try {
-      await dispatch(loginUser({ email: form.email, password: form.password })).unwrap();
-      await dispatch(fetchUserProfile()).unwrap();
-      navigate('/home');
+      await register(form);
+      setSuccess('Registration successful! Please verify your email.');
+      setTimeout(() => {
+        setShowVerify(true);
+      }, 1000);
     } catch (err) {
       setError(
         err?.response?.data?.message ||
         err?.message ||
-        'Login failed. Please check your credentials.'
+        'Registration failed. Please try again.'
       );
     } finally {
       setLoading(false);
     }
   };
 
+  if (showVerify) {
+    return (
+      <VerifyEmail
+        email={form.email}
+        onVerified={() => {
+          setShowVerify(false);
+          setSuccess('');
+          onSwitch('login');
+        }}
+        onResend={() => {/* Optionally implement resend logic here */}}
+        onBack={() => setShowVerify(false)}
+      />
+    );
+  }
+
   return (
-    <div className="w-full max-w-md mx-auto flex flex-col justify-center">
+    <div className="flex-1 flex flex-col justify-center p-6 sm:p-8 animate-fade-in">
       <div className="mb-6 flex flex-col items-center">
         <img
           src="https://cdn-icons-png.flaticon.com/512/2909/2909765.png"
@@ -48,7 +67,7 @@ const Login = ({ onSwitch }) => {
         <h1 className="text-xl sm:text-2xl font-bold text-[#8CA566] mb-1 text-center">
           Cleanwave Recycling Nigeria Limited
         </h1>
-        <span className="text-gray-500 text-sm">User Login</span>
+        <span className="text-gray-500 text-sm">User Registration</span>
       </div>
       <form onSubmit={handleSubmit} className="space-y-5">
         {error && (
@@ -56,6 +75,23 @@ const Login = ({ onSwitch }) => {
             {error}
           </div>
         )}
+        {success && (
+          <div className="bg-green-100 text-green-700 px-3 py-2 rounded text-sm text-center">
+            {success}
+          </div>
+        )}
+        <div className="relative">
+          <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8CA566]" size={20} />
+          <FloatingInput
+            label="Full Name"
+            name="name"
+            type="text"
+            value={form.name}
+            onChange={handleChange}
+            className="pl-10"
+            required
+          />
+        </div>
         <div className="relative">
           <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8CA566]" size={20} />
           <FloatingInput
@@ -65,7 +101,18 @@ const Login = ({ onSwitch }) => {
             value={form.email}
             onChange={handleChange}
             className="pl-10"
-            autoComplete="username"
+            required
+          />
+        </div>
+        <div className="relative">
+          <FiPhone className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8CA566]" size={20} />
+          <FloatingInput
+            label="Phone"
+            name="phone"
+            type="tel"
+            value={form.phone}
+            onChange={handleChange}
+            className="pl-10"
             required
           />
         </div>
@@ -78,7 +125,6 @@ const Login = ({ onSwitch }) => {
             value={form.password}
             onChange={handleChange}
             className="pl-10 pr-10"
-            autoComplete="current-password"
             required
           />
           <button
@@ -91,33 +137,21 @@ const Login = ({ onSwitch }) => {
           </button>
         </div>
         <Button type="submit" isActive={!loading} isLoading={loading} className="w-full">
-          Login
+          Register
         </Button>
       </form>
       <div className="mt-4 text-center text-xs text-gray-500">
-        Don&apos;t have an account?{' '}
+        Already have an account?{' '}
         <button
           className="text-[#8CA566] font-semibold hover:underline"
-          onClick={() => onSwitch('register')}
+          onClick={() => onSwitch('login')}
           type="button"
         >
-          Register
+          Login
         </button>
-      </div>
-      <div className="mt-2 text-center text-xs">
-        <button
-          className="text-[#8CA566] hover:underline"
-          onClick={() => onSwitch && onSwitch('forgot')}
-          type="button"
-        >
-          Forgot password?
-        </button>
-      </div>
-      <div className="mt-6 text-center text-gray-500 text-xs">
-        &copy; {new Date().getFullYear()} Cleanwave Recycling Nigeria Limited. All rights reserved.
       </div>
     </div>
   );
 };
 
-export default Login;
+export default Register;
