@@ -4,7 +4,7 @@ const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 // Fetch all pickup requests
 export const getPickupRequests = async (token) => {
-  const res = await axios.get(`${BASE_URL}/pickups`, {
+  const res = await axios.get(`${BASE_URL}/pickups/all`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return res.data;

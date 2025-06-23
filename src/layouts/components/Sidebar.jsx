@@ -22,7 +22,7 @@ const navItems = [
   { label: 'Agents', to: '/agents', icon: <Users size={20} /> },
   { label: 'Vendors', to: '/vendors', icon: <Store size={20} /> },
   { label: 'Wallet & Transactions', to: '/wallet-transactions', icon: <Wallet size={20} /> },
-  { label: 'Marketplace', to: '/marketplace', icon: <ShoppingBag size={20} /> },
+  { label: 'Marketplace', to: '/admin-marketplace', icon: <ShoppingBag size={20} /> },
 ];
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
