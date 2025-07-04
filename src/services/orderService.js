@@ -18,11 +18,11 @@ export const getVendorOrders = async (token) => {
   return response.data.orders;
 };
 
-// Place a new order
-export const placeOrder = async (products, token) => {
+// Corrected placeOrder function
+export const placeOrder = async (orderData, token) => {
   const response = await axios.post(
     `${BASE_URL}/orders`,
-    { products },
+    orderData,  // Send the complete order data directly
     { headers: { Authorization: `Bearer ${token}` } }
   );
   return response.data;

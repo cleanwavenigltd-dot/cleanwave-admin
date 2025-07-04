@@ -19,7 +19,7 @@ const UserLayout = () => {
       {/* Responsive Layout */}
       <div className="flex flex-1 pt-[76px] pb-20 w-full max-w-[1600px] mx-auto">
         {/* Main Content */}
-        <div className="flex-1 w-full px-2 sm:px-6 max-w-3xl mx-auto">
+        <div className="flex-1 w-full px-2 sm:px-6 max-w-3xl mx-auto items-start">
           <Outlet />
         </div>
         {/* Desktop-only Pickup Status Tabs */}

@@ -14,16 +14,26 @@ const Checkout = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
+  // Billing info state
+  const [billing, setBilling] = useState({
+    billing_name: '',
+    billing_address: '',
+    billing_phone: '',
+    billing_email: '',
+  });
+  const [billingTouched, setBillingTouched] = useState({});
+  const [billingError, setBillingError] = useState('');
+
   // Local state for quantity adjustment
   const [quantities, setQuantities] = useState(
     cartItems.reduce((acc, item) => {
-      acc[item.id] = item.quantity || 1;
+      acc[item.product_id || item.id] = item.quantity || 1;
       return acc;
     }, {})
   );
 
   const subtotal = cartItems.reduce(
-    (sum, item) => sum + (item.price * (quantities[item.id] || 1)),
+    (sum, item) => sum + (item.price * (quantities[item.product_id || item.id] || 1)),
     0
   );
   const shippingFee = subtotal > 0 ? 1500 : 0;
@@ -41,16 +51,46 @@ const Checkout = () => {
     });
   };
 
+  // Billing input handlers
+  const handleBillingChange = (e) => {
+    const { name, value } = e.target;
+    setBilling((prev) => ({ ...prev, [name]: value }));
+    setBillingTouched((prev) => ({ ...prev, [name]: true }));
+  };
+
+  const validateBilling = () => {
+    if (!billing.billing_name.trim()) return 'Full name is required.';
+    if (!billing.billing_address.trim()) return 'Address is required.';
+    if (!billing.billing_phone.trim()) return 'Phone number is required.';
+    if (!/^\+?\d{10,16}$/.test(billing.billing_phone.trim())) return 'Enter a valid phone number.';
+    if (!billing.billing_email.trim()) return 'Email is required.';
+    if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,}$/.test(billing.billing_email.trim())) return 'Enter a valid email address.';
+    return '';
+  };
+
   const handlePlaceOrder = async () => {
     if (!cartItems.length) return;
+    const errorMsg = validateBilling();
+    setBillingError(errorMsg);
+    if (errorMsg) return;
+
     setLoading(true);
     try {
       const products = cartItems.map(item => ({
-        product_id: item.id,
-        quantity: quantities[item.id] || 1,
+        product_id: item.product_id || item.id,
+        quantity: quantities[item.product_id || item.id] || 1,
       }));
 
-      await placeOrder(products, token);
+      // Create the complete order data object
+      const orderData = {
+        products,  // This is the array of products
+        billing_name: billing.billing_name,
+        billing_address: billing.billing_address,
+        billing_phone: billing.billing_phone,
+        billing_email: billing.billing_email,
+      };
+
+      await placeOrder(orderData, token);  // Send the complete object
 
       toast.success('Order placed successfully!');
       dispatch(clearCart());
@@ -90,7 +130,7 @@ const Checkout = () => {
               </thead>
               <tbody>
                 {cartItems.map(item => (
-                  <tr key={item.id} className="border-b last:border-b-0">
+                  <tr key={item.product_id || item.id} className="border-b last:border-b-0">
                     <td className="py-2">
                       <div className="flex items-center gap-2">
                         <img
@@ -112,18 +152,18 @@ const Checkout = () => {
                         <button
                           type="button"
                           className="w-6 h-6 rounded-full bg-gray-200 hover:bg-gray-300 text-xs flex items-center justify-center"
-                          onClick={() => handleQuantityChange(item.id, -1)}
-                          disabled={quantities[item.id] <= 1 || loading}
+                          onClick={() => handleQuantityChange(item.product_id || item.id, -1)}
+                          disabled={quantities[item.product_id || item.id] <= 1 || loading}
                           aria-label="Decrease quantity"
                         >
                           <FiMinus />
                         </button>
-                        <span className="w-6 text-center text-xs sm:text-sm">{quantities[item.id]}</span>
+                        <span className="w-6 text-center text-xs sm:text-sm">{quantities[item.product_id || item.id]}</span>
                         <button
                           type="button"
                           className="w-6 h-6 rounded-full bg-gray-200 hover:bg-gray-300 text-xs flex items-center justify-center"
-                          onClick={() => handleQuantityChange(item.id, 1, item.stock_quantity)}
-                          disabled={loading || (item.stock_quantity && quantities[item.id] >= item.stock_quantity)}
+                          onClick={() => handleQuantityChange(item.product_id || item.id, 1, item.stock_quantity)}
+                          disabled={loading || (item.stock_quantity && quantities[item.product_id || item.id] >= item.stock_quantity)}
                           aria-label="Increase quantity"
                         >
                           <FiPlus />
@@ -131,12 +171,12 @@ const Checkout = () => {
                       </div>
                     </td>
                     <td className="text-right text-xs sm:text-sm">
-                      ₦{(item.price * (quantities[item.id] || 1)).toLocaleString()}
+                      ₦{(item.price * (quantities[item.product_id || item.id] || 1)).toLocaleString()}
                     </td>
                     <td className="text-right">
                       <button
                         className="text-red-500 hover:text-red-700 text-base"
-                        onClick={() => handleRemove(item.id)}
+                        onClick={() => handleRemove(item.product_id || item.id)}
                         disabled={loading}
                         aria-label="Remove item"
                       >
@@ -147,6 +187,87 @@ const Checkout = () => {
                 ))}
               </tbody>
             </table>
+          </div>
+          {/* Billing Info */}
+          <div className="mb-4 mt-6">
+            <h2 className="text-base sm:text-lg font-semibold text-[#8CA566] mb-2">Billing Information</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-semibold mb-1 text-gray-700" htmlFor="billing_name">
+                  Full Name <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="billing_name"
+                  name="billing_name"
+                  className={`w-full border rounded-lg px-3 py-2 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#8CA566] ${billingTouched.billing_name && !billing.billing_name ? 'border-red-400' : 'border-gray-200'}`}
+                  placeholder="Enter your full name"
+                  value={billing.billing_name}
+                  onChange={handleBillingChange}
+                  onBlur={() => setBillingTouched(prev => ({ ...prev, billing_name: true }))}
+                  disabled={loading}
+                  autoComplete="name"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold mb-1 text-gray-700" htmlFor="billing_phone">
+                  Phone Number <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="tel"
+                  id="billing_phone"
+                  name="billing_phone"
+                  className={`w-full border rounded-lg px-3 py-2 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#8CA566] ${billingTouched.billing_phone && !billing.billing_phone ? 'border-red-400' : 'border-gray-200'}`}
+                  placeholder="e.g. +2348012345678"
+                  value={billing.billing_phone}
+                  onChange={handleBillingChange}
+                  onBlur={() => setBillingTouched(prev => ({ ...prev, billing_phone: true }))}
+                  disabled={loading}
+                  autoComplete="tel"
+                  required
+                />
+              </div>
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-semibold mb-1 text-gray-700" htmlFor="billing_address">
+                  Address <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="billing_address"
+                  name="billing_address"
+                  className={`w-full border rounded-lg px-3 py-2 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#8CA566] ${billingTouched.billing_address && !billing.billing_address ? 'border-red-400' : 'border-gray-200'}`}
+                  placeholder="Enter your address"
+                  value={billing.billing_address}
+                  onChange={handleBillingChange}
+                  onBlur={() => setBillingTouched(prev => ({ ...prev, billing_address: true }))}
+                  disabled={loading}
+                  autoComplete="street-address"
+                  required
+                />
+              </div>
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-semibold mb-1 text-gray-700" htmlFor="billing_email">
+                  Email <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="email"
+                  id="billing_email"
+                  name="billing_email"
+                  className={`w-full border rounded-lg px-3 py-2 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#8CA566] ${billingTouched.billing_email && !billing.billing_email ? 'border-red-400' : 'border-gray-200'}`}
+                  placeholder="Enter your email"
+                  value={billing.billing_email}
+                  onChange={handleBillingChange}
+                  onBlur={() => setBillingTouched(prev => ({ ...prev, billing_email: true }))}
+                  disabled={loading}
+                  autoComplete="email"
+                  required
+                />
+              </div>
+            </div>
+            {billingError && (
+              <div className="text-xs text-red-500 mt-2">{billingError}</div>
+            )}
           </div>
           {/* Totals - always left aligned */}
           <div className="mb-2">
