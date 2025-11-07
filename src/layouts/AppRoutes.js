@@ -1,53 +1,65 @@
-import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import React from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 // Layouts
-import AuthLayout from './AuthLayout';
-import AdminLayout from './AdminLayout';
-import VendorLayout from './VendorLayout';
-import UserLayout from './UserLayout';
+import AuthLayout from "./AuthLayout";
+import AdminLayout from "./AdminLayout";
+import VendorLayout from "./VendorLayout";
+import UserLayout from "./UserLayout";
+import WasteBankLayout from "./WasteBankLayout";
+// import Profile from "../pages/WasteBank/Profile";
+
 
 // Admin Pages
-import Login from '../pages/Login/Login';
-import Dashboard from '../pages/Dashboard/Dashboard';
-import AgentManagement from '../pages/AgentManagement/AgentManagement';
-import VendorManagement from '../pages/VendorManagement/VendorManagement';
-import PickupRequests from '../pages/PickupRequests/PickupRequests';
-import WalletTransactions from '../pages/WalletTransactions/WalletTransactions';
-import Marketplace from '../pages/Marketplace/Marketplace';
-import ProfileSettings from '../pages/ProfileSettings/ProfileSettings';
-import OrderManagement from '../pages/OrderManagement/OrderManagement';
+import Login from "../pages/Login/Login";
+import Dashboard from "../pages/Dashboard/Dashboard";
+import AgentManagement from "../pages/AgentManagement/AgentManagement";
+import VendorManagement from "../pages/VendorManagement/VendorManagement";
+import PickupRequests from "../pages/PickupRequests/PickupRequests";
+import WalletTransactions from "../pages/WalletTransactions/WalletTransactions";
+import Marketplace from "../pages/Marketplace/Marketplace";
+import ProfileSettings from "../pages/ProfileSettings/ProfileSettings";
+import OrderManagement from "../pages/OrderManagement/OrderManagement";
 
 // Vendor Pages
-import VendorLogin from '../pages/Vendor/Login/VendorLogin';
-import VendorDashboard from '../pages/Vendor/Dashboard/VendorDashboard';
-import VendorProducts from '../pages/Vendor/Products/VendorProducts';
-import VendorOrders from '../pages/Vendor/Orders/VendorOrders';
-import VendorWallet from '../pages/Vendor/Wallet/VendorWallet';
-import VendorProfile from '../pages/Vendor/Profile/VendorProfile';
+import VendorLogin from "../pages/Vendor/Login/VendorLogin";
+import VendorDashboard from "../pages/Vendor/Dashboard/VendorDashboard";
+import VendorProducts from "../pages/Vendor/Products/VendorProducts";
+import VendorOrders from "../pages/Vendor/Orders/VendorOrders";
+import VendorWallet from "../pages/Vendor/Wallet/VendorWallet";
+import VendorProfile from "../pages/Vendor/Profile/VendorProfile";
+
+// Waste Bank Pages
+import WasteBank from "../pages/WasteBank/WasteBank";
+import WasteLogin from "../pages/WasteBank/Auth/Login";
+import WasteScreen from "../pages/WasteBank/Auth/WasteScreen";
+import Profile from "../pages/WasteBank/Profile";
+import Pickups from "../pages/WasteBank/Pickups";
+import Wallet from "../pages/WasteBank/Wallete";
 
 // User Pages
-import UserLogin from '../pages/User/Auth/Login';
-import UserHome from '../pages/User/Home/Home';
-import UserPickups from '../pages/User/Pickups/Pickups';
-import UserMarketplace from '../pages/User/Marketplace/Marketplace';
-import UserWallet from '../pages/User/Wallet/Wallet';
-import UserProfile from '../pages/User/Profile/Profile';
-import ProductDetails from '../pages/User/other/ProductDetails';
-import Checkout from '../pages/User/Marketplace/components/Checkout';
-import RequestPickup from '../pages/User/Pickups/components/RequestPickup';
-import PickupsHistory from '../pages/User/Pickups/components/PickupsHistory';
-import Register from '../pages/User/Auth/Register';
-import AuthScreen from '../pages/User/Auth/AuthScreen';
+import UserLogin from "../pages/User/Auth/Login";
+import UserHome from "../pages/User/Home/Home";
+import UserPickups from "../pages/User/Pickups/Pickups";
+import UserMarketplace from "../pages/User/Marketplace/Marketplace";
+import UserWallet from "../pages/User/Wallet/Wallet";
+import UserProfile from "../pages/User/Profile/Profile";
+import ProductDetails from "../pages/User/other/ProductDetails";
+import Checkout from "../pages/User/Marketplace/components/Checkout";
+import RequestPickup from "../pages/User/Pickups/components/RequestPickup";
+import PickupsHistory from "../pages/User/Pickups/components/PickupsHistory";
+import Register from "../pages/User/Auth/Register";
+import AuthScreen from "../pages/User/Auth/AuthScreen";
 
 // ProtectedRoute
-import ProtectedRoute from './ProtectedRoute';
-import NotFound from '../pages/User/other/NotFound';
+import ProtectedRoute from "./ProtectedRoute";
+import NotFound from "../pages/User/other/NotFound";
 
 const AppRoutes = () => (
   <Routes>
     {/* User Public Route */}
     <Route path="/" element={<AuthScreen />} />
+    <Route path="/waste/login" element={<WasteScreen />} />
 
     {/* User Protected Routes */}
     <Route
@@ -68,7 +80,7 @@ const AppRoutes = () => (
       <Route path="/pickups/history" element={<PickupsHistory />} />
     </Route>
 
-    {/* Admin/Vendor Auth */}
+    {/* Admin/Vendor/waste-bank Auth */}
     <Route element={<AuthLayout />}>
       <Route path="/admin/login" element={<Login />} />
       <Route path="/vendor/login" element={<VendorLogin />} />
@@ -107,8 +119,19 @@ const AppRoutes = () => (
       <Route path="/profile" element={<ProfileSettings />} />
     </Route>
 
+    {/* Waste-Bank unProtected Routes before maintenance */}
+    <Route element={<WasteBankLayout />}>
+      <Route path="/waste/dashboard" element={<WasteBank/>} />
+      <Route path="/waste/pickups" element={<Pickups />} />
+      <Route path="/waste/wallet" element={<Wallet />} />
+      <Route path="waste/profile" element={<Profile />} />
+      {/* <Route path="/dashboard" element={<Dashboard />} /> */}
+      {/* <Route path="/waste/dashboard" element={<WasteBank />} /> */}
+      {/* <Route path="/vendors" element={<VendorManagement />} /> */}
+    </Route>
+
     {/* Redirect unknown routes */}
-        <Route path="*" element={<NotFound />} />
+    <Route path="*" element={<NotFound />} />
   </Routes>
 );
 
