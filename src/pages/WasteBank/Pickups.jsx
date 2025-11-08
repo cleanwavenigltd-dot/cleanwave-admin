@@ -45,7 +45,7 @@ const Pickups = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow space-y-8">
+    <div className="mt-[70px] pb-[100px] max-w-3xl mx-auto bg-white p-8 rounded-xl shadow space-y-8">
       <h2 className="text-2xl font-bold text-primary text-center">
         Request Waste Pickup
       </h2>
@@ -128,36 +128,38 @@ const Pickups = () => {
           <h3 className="text-xl font-bold mb-3 text-gray-800">
             Recent Pickup Requests
           </h3>
-          <table className="w-full border rounded-lg shadow text-sm">
-            <thead className="bg-gray-100 text-left">
-              <tr>
-                <th className="p-3">Category</th>
-                <th className="p-3">Weight</th>
-                <th className="p-3">Priority</th>
-                <th className="p-3">Status</th>
-                <th className="p-3">Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {requests.map((r) => (
-                <tr key={r.id} className="border-t">
-                  <td className="p-3">{r.category}</td>
-                  <td className="p-3">{r.weight} kg</td>
-                  <td
-                    className={`p-3 font-semibold ${
-                      r.priority === "Urgent"
-                        ? "text-red-600"
-                        : "text-green-600"
-                    }`}
-                  >
-                    {r.priority}
-                  </td>
-                  <td className="p-3 text-yellow-600">{r.status}</td>
-                  <td className="p-3">{r.date}</td>
+          <div className="w-full max-h-40 overflow-y-scroll mb-[100px]">
+            <table className="w-full border rounded-lg shadow text-sm">
+              <thead className="bg-gray-100 text-left">
+                <tr>
+                  <th className="p-3">Category</th>
+                  <th className="p-3">Weight</th>
+                  <th className="p-3">Priority</th>
+                  <th className="p-3">Status</th>
+                  <th className="p-3">Date</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {requests.map((r) => (
+                  <tr key={r.id} className="border-t">
+                    <td className="p-3">{r.category}</td>
+                    <td className="p-3">{r.weight} kg</td>
+                    <td
+                      className={`p-3 font-semibold ${
+                        r.priority === "Urgent"
+                          ? "text-red-600"
+                          : "text-green-600"
+                      }`}
+                    >
+                      {r.priority}
+                    </td>
+                    <td className="p-3 text-yellow-600">{r.status}</td>
+                    <td className="p-3">{r.date}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>

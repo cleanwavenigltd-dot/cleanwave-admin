@@ -263,7 +263,7 @@ const WasteBankTable = () => {
   };
 
   return (
-    <div className=" mt-[100px] max-w-3xl mx-auto bg-white p-8 rounded-xl shadow space-y-8">
+    <div className=" mt-[70px] pb-[100px] max-w-3xl mx-auto bg-white p-8 rounded-xl shadow space-y-8">
       <h2 className="text-2xl font-bold text-primary text-center">
         Record Waste Collection
       </h2>
